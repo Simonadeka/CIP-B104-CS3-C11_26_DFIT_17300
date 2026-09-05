@@ -25,6 +25,7 @@ The objective was to follow DFIT methodology to acquire, verify, analyze, and do
 **Case ID:** CIP-B104-CS3-C11_26_DFIT_17300  
 **Investigator:** Simon Friday Adeka  
 **Date:** 04 September 2026  
+**Location:** Abuja, Nigeria
 
 ---
 
@@ -37,41 +38,45 @@ The objective was to follow DFIT methodology to acquire, verify, analyze, and do
 | PhotoRec | 7.2 | Data Carving |
 | steghide | 0.5.1 | Steganography Detection |
 | sha256sum | 9.4 | Hash Verification |
+| md5sum | 9.4 | Hash Verification |
 
 ---
 
 ### 3. EVIDENCE DETAILS
-| Item | Description | Hash |
-| --- | --- | --- |
-| Original | RHINOUSB.dd | See Screenshot 0 |
-| Working Copy | RHINOUSB_working.dd | Verified Match |
-| Key File 1 | f0335017_She_died_in_February_at_the_age_of_74.doc | Recovered |
-| Key File 2 | f0335081.jpg | Contained Stego |
+| Item | Description | Hash | Status |
+| --- | --- | --- | --- |
+| Original | RHINOUSB.dd | See Screenshot 0 | Acquired |
+| Working Copy | RHINOUSB_working.dd | Verified Match | Verified |
+| Key File 1 | f0335017_She_died_in_February_at_the_age_of_74.doc | See Section 6.3 | Recovered |
+| Key File 2 | f0335081.jpg | See Section 6.3 | Contained Stego |
+| Key File 3 | extracted_evidence.txt | See Section 6.3 | Extracted |
 
 ---
 
 ### 4. INVESTIGATION PROCESS
 
 #### 4.1 Acquisition & Verification
-Created forensic image and verified SHA256 hash.
+Created forensic image using `dd`. Verified integrity with SHA256 hash.
 
 #### 4.2 Analysis
-Used `mmls`, `fsstat`, `fls` to analyze file system. FAT16 detected.
+Used `mmls`, `fsstat`, `fls` to analyze file system. FAT16 detected. 1 partition.
 
 #### 4.3 Recovery
-Used PhotoRec to recover deleted files.
+Used PhotoRec to carve deleted files from unallocated space. Recovered 2 key files.
 
 #### 4.4 Advanced Analysis
-Detected steganography. Extracted data using passphrase from recovered filename.
+Detected steganography in `f0335081.jpg`. Used passphrase from `f0335017.doc` filename to extract hidden data.
+Command: `steghide extract -sf f0335081.jpg -p "She died in February at the age of 74"`
 
 ---
 
 ### 5. KEY FINDINGS
 1.  **File System:** FAT16, 1 Partition
-2.  **Recovered File:** `f0335017_She_died_in_February_at_the_age_of_74.doc`
-3.  **Stego Passphrase:** `She died in February at the age of 74`
-4.  **Extracted Text:** References to August 2001, personal relationships
-5.  **Evidence Hash:** `2545063f0580a80936bd999b60b683d66e565c0004f84b28e9740afaaa87ae5b`
+2.  **Recovered File 1:** `f0335017_She_died_in_February_at_the_age_of_74.doc` - Contains passphrase
+3.  **Recovered File 2:** `f0335081.jpg` - Contains steganographic data
+4.  **Stego Passphrase:** `She died in February at the age of 74`
+5.  **Extracted Evidence:** `extracted_evidence.txt` - Contains references to August 2001, personal relationships
+6.  **Chain of Custody:** Maintained via MD5/SHA256 hashing at each stage
 
 ---
 
@@ -100,7 +105,7 @@ Detected steganography. Extracted data using passphrase from recovered filename.
 **Screenshot 6: Carved Files**  
 ![carved](06_Screenshots/02d_carved_files_listing.png)
 
-#### 6.3 Steganography & Evidence
+#### 6.3 Steganography & Evidence Hashing
 **Screenshot 7: Stego Check**  
 ![stego](06_Screenshots/02e_steganography_check.png)
 
@@ -118,6 +123,13 @@ Detected steganography. Extracted data using passphrase from recovered filename.
 
 **Screenshot 12: Evidence Hashing**  
 ![hash](06_Screenshots/04b_evidence_documentation.png)
+_Figure 12: MD5 and SHA256 hashes for recovered evidence files_
+
+| File Name | MD5 | SHA256 |
+| --- | --- | --- |
+| f0335017_She_died_in_February_at_the_age_of_74.doc | [ADD MD5 HERE] | [ADD SHA256 HERE] |
+| f0335081.jpg | [ADD MD5 HERE] | [ADD SHA256 HERE] |
+| extracted_evidence.txt | 2545063f0580a80936bd999b60b683d66e565c0004f84b28e9740afaaa87ae5b | [ADD SHA256 HERE] |
 
 #### 6.4 Documentation
 **Screenshot 13: Master Provenance**  
@@ -130,7 +142,7 @@ Detected steganography. Extracted data using passphrase from recovered filename.
 
 ### 7. CONCLUSION
 The investigation was conducted following DFIT standards. All steps were documented with screenshots and hashes.  
-Steganographic data was successfully identified and extracted. The extracted evidence is relevant to the case.
+Steganographic data was successfully identified and extracted using the passphrase from the recovered document filename. The extracted evidence is relevant to the case and maintains forensic integrity.
 
 **Full Report:** `Final_Report.pdf`  
 
